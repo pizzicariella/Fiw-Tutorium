@@ -72,9 +72,9 @@ public class View extends JFrame implements ActionListener{
 		
 		private void rectZeichnen(Color c, int x, int y) {
 			g2.setColor(c);
-			g2.fillRect(x, y,this.FELDSIZE, this.FELDSIZE);
-			g2.setColor(Color.BLACK);
-			g2.drawRect(x, y,this.FELDSIZE,this.FELDSIZE);
+			g2.fill3DRect(x, y,this.FELDSIZE, this.FELDSIZE,true);
+			g2.setColor(Color.WHITE);
+			g2.draw3DRect(x, y,this.FELDSIZE,this.FELDSIZE,true);
 		}
 		
 		private void ovalZeichnen(int x, int y) {
