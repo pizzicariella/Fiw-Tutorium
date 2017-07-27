@@ -64,7 +64,8 @@ public class Model {
 		}
 	}
 	
-	public void move(Point from, Point to) {
+	public boolean move(Point from, Point to) {
+		boolean makeMove = false;
 		if(this.pointsValid(from, to)) {
 			int mX; int mY;
 			if(from.x - to.x == 0) {
@@ -89,6 +90,7 @@ public class Model {
 			
 			if(this.field[from.x][from.y] == State.USED && this.field[to.x][to.y]==State.FREE && 
 					this.field[middle.x][middle.y] == State.USED) {
+				makeMove = true;
 				this.field[from.x][from.y] = State.FREE;
 				this.field[to.x][to.y]= State.USED;
 				this.field[middle.x][middle.y] =State.FREE;
@@ -97,7 +99,12 @@ public class Model {
 			moves.add(middle);
 			moves.add(to);
 		}
+		return makeMove;
 	}
+	public State[][] getField() {
+		return field;
+	}
+
 	public void lastMoveUndo() {
 		if(!moves.isEmpty()) {
 			int laenge =moves.size();
@@ -109,5 +116,56 @@ public class Model {
 			moves.remove(laenge-2);
 			moves.remove(laenge-3);
 		}
+	}
+	
+	public boolean gewonnen(){
+		int usedFields=0;
+		for(int i =0; i<this.field.length;i++){
+			for(int j =0; j<this.field.length;j++){
+				if(this.field[i][j]==State.USED){
+					usedFields++;
+				}
+			}
+		}
+		if(usedFields == 1){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public boolean verloren(){
+		for(int i =0; i<this.field.length;i++){
+			for(int j =0;j<this.field.length;j++){
+				if(this.field[i][j]==State.USED){
+					if(i<5){
+						if(move(new Point(i,j), new Point(i+2,j))){
+							lastMoveUndo();
+							return false;
+						}
+					}
+					if(i>=2){
+						if(move(new Point(i,j), new Point(i-2,j))){
+							lastMoveUndo();
+							return false;
+						}
+					}
+					if(j<5){
+						if(move(new Point(i,j), new Point(i,j+2))){
+							lastMoveUndo();
+							return false;
+						}
+					}
+					if(j>=2){
+						if(move(new Point(i,j), new Point(i,j-2))){
+							lastMoveUndo();
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 }
