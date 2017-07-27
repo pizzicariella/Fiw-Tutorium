@@ -12,16 +12,19 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import aufgaben.aufgabe10.Model;
 import aufgaben.aufgabe10.State;
+import aufgaben.aufgabe12.Controller;
 
 public class View extends JFrame implements ActionListener{
 
 	Model model;
 	Canvas canvas;
 	JButton undo;
+	Controller controller;
 	
 	public View(Model model) {
 		super("Solitaer");
@@ -34,6 +37,7 @@ public class View extends JFrame implements ActionListener{
 		this.setSize(600,650);
 		this.add(canvas, BorderLayout.CENTER);
 		this.add(undo, BorderLayout.SOUTH);
+		this.controller=new Controller();
 		this.setVisible(true);
 	}
 	
@@ -86,8 +90,31 @@ public class View extends JFrame implements ActionListener{
 		public void mouseClicked(MouseEvent e) {
 			int x = (e.getX()-20)/this.FELDSIZE;
 			int y = (e.getY()-20)/this.FELDSIZE;
-			Point p = new Point(x,y);
+			Point p = new Point(y,x);
 			System.out.println(p.y+","+p.x);
+			if(View.this.controller.movePossible){
+				View.this.controller.setFrom(p);
+				View.this.controller.movePossible=false;
+			}
+			else{
+				View.this.controller.setTo(p);
+				View.this.controller.movePossible=true;
+			}
+			if(View.this.controller.movePossible){
+				if(View.this.model.move(View.this.controller.getFrom(), View.this.controller.getTo())){
+					repaint();
+					if(View.this.model.gewonnen()){
+						JOptionPane.showMessageDialog(this, "Herzlichen Glückwunsch! Sie haben gewonnen!");
+					}
+					else if(View.this.model.verloren()){
+						JOptionPane.showMessageDialog(this, "Leider haben Sie das Spiel verloren", "Verloren", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(this, "Für die gewählten Felder ist der Zug nicht möglich. "
+							+ "Wählen Sie neu!");
+				}
+			}
 		}
 
 		@Override
