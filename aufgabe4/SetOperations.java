@@ -20,7 +20,7 @@ public class SetOperations {
 		public void fill()
 		{
 			Random r = new Random();
-			for(int i=0;i<=100;i++)
+			for(int i=0;i<100;i++)
 			{
 				this.numbers1.add(Integer.valueOf(r.nextInt(100)));
 				this.numbers2.add(Integer.valueOf(r.nextInt(100)));
@@ -29,6 +29,7 @@ public class SetOperations {
 		
 		public void fillBothUnion()
 		{
+			this.both.clear();
 			this.both.addAll(this.numbers1);
 			this.both.addAll(this.numbers2);
 		}
@@ -38,6 +39,7 @@ public class SetOperations {
 			Set<Integer> intersection = new TreeSet<>();
 			intersection.addAll(this.numbers1);
 			intersection.retainAll(this.numbers2);
+			this.both.clear();
 			this.both.addAll(intersection);
 		}
 		
@@ -46,6 +48,7 @@ public class SetOperations {
 			Set<Integer> difference =new TreeSet<>();
 			difference.addAll(this.numbers1);
 			difference.removeAll(this.numbers2);
+			this.both.clear();
 			this.both.addAll(difference);
 		}
 		
